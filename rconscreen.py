@@ -37,38 +37,73 @@ def block_worker(queue_index):
 
     while True:
         try:
-            x, y, block = q.get(timeout=1)
+            x1, y1, x2, y2, block = q.get(timeout=1)
         except queue.Empty:
             continue
 
         if rcon:
-            cmd = f"setblock {START_X + x} {START_Y + y} {START_Z} {block}"
+            if x1 == x2 and y1 == y2:
+                cmd = f"setblock {START_X + x1} {START_Y + y1} {START_Z} {block}"
+            else:
+                cmd = f"fill {START_X + x1} {START_Y + y1} {START_Z} {START_X + x2} {START_Y + y2} {START_Z} {block}"
+
             try:
                 rcon.command(cmd)
             except Exception as e:
-                print(f"[Thread {queue_index}] Command failed at ({x},{y}): {e}")
-                thread_local.rcon = None  # Reset and reconnect
+                print(f"[Thread {queue_index}] Command failed: {e}")
+                thread_local.rcon = None
                 rcon = get_rcon()
 
         q.task_done()
 
+def color_distance(c1, c2):
+    """Euclidean distance between two RGB tuples."""
+    return ((c1[0] - c2[0]) ** 2 +
+            (c1[1] - c2[1]) ** 2 +
+            (c1[2] - c2[2]) ** 2) ** 0.5
+
+COLOR_DIFF_THRESHOLD = 20  # Adjust as needed
+
 def send_blocks():
+    """Distribute horizontal runs of same block using 'fill' commands."""
     global previous_block_map
     block_map = get_minecraft_block_map()
     total_rows = len(block_map)
 
-    # First frame: send everything
     if previous_block_map is None:
         previous_block_map = [["" for _ in row] for row in block_map]
 
-    # We are only sending rcon commands for blocks that are different
     for y, row in enumerate(block_map):
         flipped_y = total_rows - y - 1
         worker_index = y % NUM_WORKERS
-        for x, block in enumerate(row):
-            if previous_block_map[y][x] != block:
-                worker_queues[worker_index].put((x, flipped_y, block))
-                previous_block_map[y][x] = block  # Update the cache
+
+        x = 0
+        while x < len(row):
+            current_block = row[x]
+            prev_block = previous_block_map[y][x]
+            run_start = x
+
+            # Build run of same block
+            while x + 1 < len(row) and row[x + 1] == current_block and previous_block_map[y][x + 1] != current_block:
+                x += 1
+
+            # Only send if block differs from previous frame
+            run_end = x
+            changed = any(previous_block_map[y][xi] != current_block for xi in range(run_start, run_end + 1))
+
+            if changed:
+                if run_end > run_start:
+                    # Send fill command for run
+                    worker_queues[worker_index].put((run_start, flipped_y, run_end, flipped_y, current_block))
+                else:
+                    # Send single setblock-like fill
+                    worker_queues[worker_index].put((run_start, flipped_y, run_start, flipped_y, current_block))
+
+                # Update previous map
+                for xi in range(run_start, run_end + 1):
+                    previous_block_map[y][xi] = current_block
+
+            x += 1
 
 def wait_for_workers():
     for q in worker_queues:
