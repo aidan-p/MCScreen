@@ -1,23 +1,23 @@
 from blocks import MINECRAFT_BLOCKS
 from PIL import Image
 import mss
-import math
+import numpy as np
 
 # Change these values to the size you wish for your screen to be downscaled to
-# (Try to keep it as close to your aspect ratio as possible)
-desiredWidth = 128
-desiredHeight = 72
+# (Try to make it the same as your aspect ratio)
+desiredWidth = 80
+desiredHeight = 45
+
+# Convert MINECRAFT_BLOCKS to NumPy array for fast color distance computation
+BLOCK_NAMES = list(MINECRAFT_BLOCKS.keys())
+BLOCK_COLORS = np.array(list(MINECRAFT_BLOCKS.values()))  # shape: (num_blocks, 3)
 
 def closest_block_color(rgb):
-    r, g, b = rgb
-    closest_block = None
-    min_distance = float("inf")
-    for block, (br, bg, bb) in MINECRAFT_BLOCKS.items():
-        distance = math.sqrt((r - br)**2 + (g - bg)**2 + (b - bb)**2)
-        if distance < min_distance:
-            min_distance = distance
-            closest_block = block
-    return closest_block
+    """Vectorized color distance computation."""
+    color = np.array(rgb)
+    distances = np.linalg.norm(BLOCK_COLORS - color, axis=1)
+    min_index = np.argmin(distances)
+    return BLOCK_NAMES[min_index]
 
 def get_downscaled_screen(res=(desiredWidth, desiredHeight)):
     with mss.mss() as sct:
@@ -29,16 +29,13 @@ def get_downscaled_screen(res=(desiredWidth, desiredHeight)):
 
 def get_minecraft_block_map(res=(desiredWidth, desiredHeight)):
     img = get_downscaled_screen(res)
-    pixels = img.load()
-    width, height = img.size
+    img = img.convert("RGB")
+    np_pixels = np.array(img)  # shape: (height, width, 3)
+    height, width = np_pixels.shape[:2]
 
-    block_map = []
-    for y in range(height):
-        row = []
-        for x in range(width):
-            rgb = pixels[x, y]
-            block = closest_block_color(rgb)
-            row.append(block)
-        block_map.append(row)
+    block_map = [
+        [closest_block_color(tuple(np_pixels[y, x])) for x in range(width)]
+        for y in range(height)
+    ]
 
     return block_map
