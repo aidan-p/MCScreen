@@ -4,6 +4,7 @@ from mcrcon import MCRcon
 import threading
 import queue
 
+# Change values to correct host (if it is not local), port, and RCON password
 HOST = "localhost"
 PORT = 25575
 PASSWORD = "yourpassword"
