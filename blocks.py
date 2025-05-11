@@ -9,7 +9,7 @@ MINECRAFT_BLOCKS = {
     'minecraft:yellow_wool': (249, 199, 35),
     'minecraft:lime_wool': (112, 185, 25),
     'minecraft:pink_wool': (237, 141, 172),
-    'minecraft:gray_wool': (62, 68, 71),
+    'minecraft:gray_wool': (34, 38, 31),
     'minecraft:light_gray_wool': (142, 142, 135),
     'minecraft:cyan_wool': (21, 137, 145),
     'minecraft:purple_wool': (121, 42, 172),
@@ -17,7 +17,7 @@ MINECRAFT_BLOCKS = {
     'minecraft:brown_wool': (114, 71, 40),
     'minecraft:green_wool': (84, 109, 27),
     'minecraft:red_wool': (161, 39, 34),
-    'minecraft:black_wool': (20, 21, 25),
+    'minecraft:black_wool': (15, 15, 15),
 
     # --- Concrete ---
     'minecraft:white_concrete': (207, 213, 214),
@@ -27,7 +27,7 @@ MINECRAFT_BLOCKS = {
     'minecraft:yellow_concrete': (241, 175, 21),
     'minecraft:lime_concrete': (94, 168, 24),
     'minecraft:pink_concrete': (214, 101, 143),
-    'minecraft:gray_concrete': (54, 57, 61),
+    'minecraft:gray_concrete': (64, 67, 71),
     'minecraft:light_gray_concrete': (125, 125, 115),
     'minecraft:cyan_concrete': (21, 119, 136),
     'minecraft:purple_concrete': (100, 31, 156),
@@ -68,64 +68,7 @@ MINECRAFT_BLOCKS = {
     'minecraft:crimson_planks': (137, 33, 94),
     'minecraft:warped_planks': (43, 122, 101),
 
-    # --- Stained Clay-like Solids ---
-    'minecraft:sandstone': (218, 210, 158),
-    'minecraft:red_sandstone': (178, 98, 39),
-    'minecraft:end_stone': (230, 223, 175),
-    'minecraft:nether_bricks': (45, 23, 30),
-    'minecraft:red_nether_bricks': (74, 9, 17),
-    'minecraft:polished_blackstone': (36, 31, 36),
-    'minecraft:deepslate': (56, 56, 62),
-    'minecraft:polished_deepslate': (58, 58, 64),
-    'minecraft:andesite': (136, 136, 136),
-    'minecraft:diorite': (188, 188, 188),
-    'minecraft:granite': (149, 108, 76),
-
-    # --- Stone Variants ---
-    'minecraft:stone': (125, 125, 125),
-    'minecraft:cobblestone': (116, 116, 116),
-    'minecraft:mossy_cobblestone': (102, 116, 102),
-    'minecraft:moss_block': (96, 121, 70),
-
-    # --- Miscellaneous Solids ---
-    'minecraft:netherrack': (111, 54, 52),
-    'minecraft:soul_sand': (84, 64, 51),
-    'minecraft:soul_soil': (86, 66, 59),
-    'minecraft:calcite': (220, 220, 210),
-    'minecraft:tuff': (80, 78, 80),
-    'minecraft:dripstone_block': (152, 121, 91),
-    'minecraft:mud': (63, 50, 38),
-    'minecraft:packed_mud': (151, 110, 72),
-    'minecraft:mud_bricks': (125, 93, 64),
-    'minecraft:prismarine': (100, 141, 143),
-    'minecraft:prismarine_bricks': (74, 178, 180),
-    'minecraft:dark_prismarine': (50, 101, 101),
-    'minecraft:purpur_block': (171, 126, 171),
-    'minecraft:honeycomb_block': (229, 143, 32),
-
-    # --- Minerals and Ore Blocks ---
-    'minecraft:diamond_ore': (28, 47, 50),
-    'minecraft:gold_ore': (241, 198, 44),
-    'minecraft:iron_ore': (152, 150, 140),
-    'minecraft:coal_ore': (56, 56, 56),
-    'minecraft:lapis_ore': (27, 49, 133),
-    'minecraft:redstone_ore': (149, 30, 27),
-    'minecraft:emerald_ore': (41, 90, 23),
-    'minecraft:nether_quartz_ore': (143, 141, 135),
-    'minecraft:nether_gold_ore': (226, 171, 95),
-
-    # --- Other Solid Blocks ---
-    'minecraft:quartz_block': (211, 204, 200),
-    'minecraft:nether_brick': (96, 63, 45),
-    'minecraft:chiseled_quartz_block': (211, 204, 200),
-    'minecraft:lime_glazed_terracotta': (157, 197, 91),
-    'minecraft:light_blue_glazed_terracotta': (100, 162, 213),
-    'minecraft:melons': (215, 159, 0),
-    'minecraft:pumpkin': (255, 134, 0),
-    'minecraft:shroomlight': (206, 165, 115),
-    'minecraft:slime_block': (90, 215, 66),
-
-        # --- Full Blocks from Ores ---
+    # --- Full Blocks from Ores ---
     'minecraft:diamond_block': (92, 219, 213),
     'minecraft:gold_block': (254, 204, 0),
     'minecraft:iron_block': (153, 153, 153),
