@@ -17,6 +17,9 @@
 - Download repo and unzip in any directory.
 - Decide if you would like to use the RCON implementation (slower) or plugin implementation (quicker)
   - Change the "USE_FAST_PLUGIN" variable to "False" if you would like to use RCON, otherwise leave as "True" if you are using the plugin
+- Modify "NUM_WORKERS" to the number of threads you would like to handle the display (for example, I have a Ryzen 7 5700x3d which is an 8c/16t chip, so I am using all 16 threads)
+- Modify the "RCON_PORT"/"PLUGIN_PORT" and "PASSWORD" to the correct variables
+- Modify the "START_X", "START_Y", and "START_Z" to the appropriate coordinates
 - Run by executing:
   ```bash
   python .\mcscreen.py
