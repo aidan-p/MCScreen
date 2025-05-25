@@ -75,5 +75,5 @@ MINECRAFT_BLOCKS = {
     'minecraft:lapis_block': (28, 48, 129),
     'minecraft:redstone_block': (151, 37, 39),
     'minecraft:emerald_block': (48, 212, 103),
-    'minecraft:nether_quartz_block': (188, 184, 168),
+    'minecraft:quartz_block': (188, 184, 168),
 }
