@@ -5,8 +5,8 @@ import numpy as np
 
 # Change these values to the size you wish for your screen to be downscaled to
 # (Try to make it the same as your aspect ratio)
-desiredWidth = 80
-desiredHeight = 45
+desiredWidth = 64
+desiredHeight = 36
 
 # Convert MINECRAFT_BLOCKS to NumPy array for fast color distance computation
 BLOCK_NAMES = list(MINECRAFT_BLOCKS.keys())
@@ -16,8 +16,7 @@ def closest_block_color(rgb):
     """Vectorized color distance computation."""
     color = np.array(rgb)
     distances = np.linalg.norm(BLOCK_COLORS - color, axis=1)
-    min_index = np.argmin(distances)
-    return BLOCK_NAMES[min_index]
+    return BLOCK_NAMES[np.argmin(distances)]
 
 def get_downscaled_screen(res=(desiredWidth, desiredHeight)):
     with mss.mss() as sct:
