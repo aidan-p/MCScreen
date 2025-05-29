@@ -23,7 +23,7 @@ def get_downscaled_screen(res=(desiredWidth, desiredHeight)):
         monitor = sct.monitors[1]  # main monitor
         screenshot = sct.grab(monitor)
         img = Image.frombytes("RGB", (screenshot.width, screenshot.height), screenshot.rgb)
-        img = img.resize(res, Image.BILINEAR)
+        img = img.resize(res, Image.NEAREST)
         return img
 
 def get_minecraft_block_map(res=(desiredWidth, desiredHeight)):
