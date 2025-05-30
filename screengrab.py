@@ -3,38 +3,26 @@ from PIL import Image
 import mss
 import numpy as np
 
-# Change these values to the size you wish for your screen to be downscaled to
-# (Try to make it the same as your aspect ratio)
-desiredWidth = 64
-desiredHeight = 36
+DESIRED_WIDTH = 64
+DESIRED_HEIGHT = 36
 
-# Convert MINECRAFT_BLOCKS to NumPy array for fast color distance computation
-BLOCK_NAMES = list(MINECRAFT_BLOCKS.keys())
-BLOCK_COLORS = np.array(list(MINECRAFT_BLOCKS.values()))  # shape: (num_blocks, 3)
+BLOCK_NAMES = np.array(list(MINECRAFT_BLOCKS.keys()))
+BLOCK_COLORS = np.array(list(MINECRAFT_BLOCKS.values()), dtype=np.int32)  # Prevent overflow
 
-def closest_block_color(rgb):
-    """Vectorized color distance computation."""
-    color = np.array(rgb)
-    distances = np.linalg.norm(BLOCK_COLORS - color, axis=1)
-    return BLOCK_NAMES[np.argmin(distances)]
-
-def get_downscaled_screen(res=(desiredWidth, desiredHeight)):
+def get_downscaled_screen(res=(DESIRED_WIDTH, DESIRED_HEIGHT)):
     with mss.mss() as sct:
-        monitor = sct.monitors[1]  # main monitor
+        monitor = sct.monitors[1]
         screenshot = sct.grab(monitor)
         img = Image.frombytes("RGB", (screenshot.width, screenshot.height), screenshot.rgb)
-        img = img.resize(res, Image.BILINEAR)
+        img = img.resize(res, Image.NEAREST)  # Fast resizing
         return img
 
-def get_minecraft_block_map(res=(desiredWidth, desiredHeight)):
+def get_minecraft_block_map(res=(DESIRED_WIDTH, DESIRED_HEIGHT)):
     img = get_downscaled_screen(res)
-    img = img.convert("RGB")
-    np_pixels = np.array(img)  # shape: (height, width, 3)
-    height, width = np_pixels.shape[:2]
-
-    block_map = [
-        [closest_block_color(tuple(np_pixels[y, x])) for x in range(width)]
-        for y in range(height)
-    ]
-
-    return block_map
+    np_pixels = np.asarray(img, dtype=np.int32)  # Prevent overflow
+    h, w = np_pixels.shape[:2]
+    flat_pixels = np_pixels.reshape(-1, 3)
+    dists = np.sum((flat_pixels[:, None, :] - BLOCK_COLORS[None, :, :]) ** 2, axis=2)
+    closest_indices = np.argmin(dists, axis=1)
+    block_names = BLOCK_NAMES[closest_indices]
+    return block_names.reshape(h, w).tolist()
